@@ -1,0 +1,95 @@
+html,
+body {
+    height: 100%;
+}
+
+:root {
+    --main-color-1: #222;
+    --main-color-2: #444;
+    --main-color-3: #eee;
+    --main-color-4: #bbbbbb;
+}
+
+body {
+    background-color: var(--main-color-1);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+* {
+    color: var(--main-color-4);
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.row {
+    display: flex;
+    height: 100%;
+}
+
+.column#leftColumn {
+    width: 40%;
+    margin-bottom: 50px;
+    border-bottom: 1px solid var(--main-color-3);
+    overflow: auto;
+}
+
+.column#rightColumn {
+    width: 60%;
+}
+
+ul {
+    list-style-type: none;
+    padding: 5px;
+}
+
+li {
+    cursor: pointer;
+    padding: 8px 5px;
+    border-top: 1px solid var(--main-color-3);
+}
+
+li:hover {
+    text-decoration: underline;
+}
+
+li.folder {
+    background-color: var(--main-color-2);
+}
+
+iframe#preview {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    border-left: 1px solid var(--main-color-3);
+}
+
+div#functions {
+    position: absolute;
+    padding: 5px;
+    bottom: 8px;
+}
+
+div#functions * {
+    background-color: var(--main-color-2);
+    border: 1px solid var(--main-color-3);
+    padding: 5px;
+}
+
+div#functions #searchInput {
+    width: 140px;
+}
+
+div#functions #closeOverview,
+div#functions #openOverview {
+    padding: 4px 8px;
+    margin-right: 5px;
+}
+
+div#functions #newTab,
+div#functions #searchInput,
+div#functions #copyTitle,
+div#functions #copyFilePath {
+    margin-left: 5px;
+    margin-right: 5px;
+}
