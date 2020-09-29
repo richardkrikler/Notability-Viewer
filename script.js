@@ -14,6 +14,7 @@ let searchInput = document.getElementById("searchInput");
 
 let copyTitle = document.getElementById("copyTitle");
 let copyFilePath = document.getElementById("copyFilePath");
+let copyFolderPath = document.getElementById("copyFolderPath");
 let currentTitle = undefined;
 let currentFilePath = undefined;
 
@@ -225,6 +226,11 @@ copyTitle.addEventListener("click", function () {
 // copy the full file path of the currently open note into the clipboard
 copyFilePath.addEventListener("click", function () {
     copyStringToClipboard(currentFilePath);
+})
+
+// copy the folder path of the currently open note into the clipboard
+copyFolderPath.addEventListener("click", function () {
+    copyStringToClipboard(currentFilePath.substring(0, currentFilePath.lastIndexOf("\\")));
 })
 
 
