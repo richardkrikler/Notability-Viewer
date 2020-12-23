@@ -7,7 +7,7 @@ body {
     --main-color-1: #222;
     --main-color-2: #444;
     --main-color-3: #eee;
-    --main-color-4: #bbbbbb;
+    --main-color-4: #bbb;
 }
 
 body {
@@ -22,31 +22,67 @@ body {
     box-sizing: border-box;
 }
 
-.row {
-    display: flex;
+
+
+/* make element not selectable */
+.unselectable,
+#functions,
+#functions *,
+#preview {
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+
+
+.row,
+.column#rightColumn {
+    width: 100%;
     height: 100%;
+    display: flex;
 }
 
 .column#leftColumn {
-    width: 40%;
-    margin-bottom: 50px;
-    border-bottom: 1px solid var(--main-color-3);
+    min-width: 10%;
+    max-width: 90%;
+    margin-bottom: 40px;
     overflow: auto;
+
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-basis: 40%;
 }
 
 .column#rightColumn {
-    width: 60%;
+    flex-grow: 0;
+    flex-shrink: 1;
+    overflow-x: auto;
 }
 
+.column#resizeArea {
+    width: 0.25rem;
+    margin: 0 0 0 auto;
+    background: var(--main-color-3);
+    flex-grow: 0;
+    flex-shrink: 0;
+    cursor: col-resize;
+}
+
+
+
 ul {
-    list-style-type: none;
+    width: 100%;
     padding: 5px;
+    list-style-type: none;
 }
 
 li {
-    cursor: pointer;
     padding: 8px 5px;
     border-top: 1px solid var(--main-color-3);
+    cursor: pointer;
 }
 
 li:hover {
@@ -57,23 +93,32 @@ li.folder {
     background-color: var(--main-color-2);
 }
 
+
+
 iframe#preview {
     width: 100%;
     height: 100%;
     border: 0;
-    border-left: 1px solid var(--main-color-3);
 }
 
+
+
 div#functions {
+    min-width: 10%;
+    max-width: 90%;
+    padding: 6px;
+    background-color: var(--main-color-1);
+    border-top: 1px solid var(--main-color-3);
     position: absolute;
-    padding: 5px;
-    bottom: 8px;
+    bottom: 0;
+    white-space: nowrap;
+    overflow-x: auto;
 }
 
 div#functions * {
+    padding: 5px;
     background-color: var(--main-color-2);
     border: 1px solid var(--main-color-3);
-    padding: 5px;
 }
 
 div#functions #searchInput {
@@ -83,7 +128,6 @@ div#functions #searchInput {
 div#functions #closeOverview,
 div#functions #openOverview {
     padding: 4px 8px;
-    margin-right: 5px;
 }
 
 div#functions #newTab,
@@ -92,5 +136,4 @@ div#functions #copyTitle,
 div#functions #copyFilePath,
 div#functions #copyFolderPath {
     margin-left: 5px;
-    margin-right: 5px;
 }

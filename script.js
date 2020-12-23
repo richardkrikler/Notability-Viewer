@@ -1,5 +1,6 @@
 let leftColumn = document.getElementById("leftColumn");
 let rightColumn = document.getElementById("rightColumn");
+let resizeArea = document.getElementById("resizeArea");
 
 let listItems = document.getElementsByTagName("li");
 let preview = document.getElementById("preview");
@@ -7,7 +8,8 @@ let folderUp = document.getElementById("folderUp");
 
 
 // menu buttons
-let functionsEle = document.getElementById("functions").childNodes;
+let functionsDiv = document.getElementById("functions");
+let functionsEle = functionsDiv.childNodes;
 
 let newTab = document.getElementById("newTab");
 let searchInput = document.getElementById("searchInput");
@@ -20,6 +22,13 @@ let currentFilePath = undefined;
 
 let closeOverview = document.getElementById("closeOverview");
 let openOverview = document.getElementById("openOverview");
+
+// set the width of the functions div to the width of the left column
+function setFunctionsDivWidth() {
+    functionsDiv.style.width = leftColumn.clientWidth + "px";
+}
+window.addEventListener("load", setFunctionsDivWidth);
+window.addEventListener("resize", setFunctionsDivWidth);
 
 
 // add an event listener to every file and folder
@@ -100,7 +109,7 @@ searchInput.addEventListener("keyup", function () {
     }
 
     // Loop through all list items, and hide those who don't match the search query
-    for (i = 0; i < visibleList.length; i++) {
+    for (let i = 0; i < visibleList.length; i++) {
         let txtValue = visibleList[i].textContent || visibleList[i].innerText;
         if (txtValue.toUpperCase().indexOf(filter) > -1) {
             visibleList[i].style.display = "";
@@ -236,9 +245,9 @@ copyFolderPath.addEventListener("click", function () {
 
 // close the note overview and set the with of the current preview to 100%
 closeOverview.addEventListener("click", function () {
-    leftColumn.style.width = "0%";
-    rightColumn.style.width = "100%";
-    preview.style.borderLeft = "0";
+    leftColumn.style.display = "none";
+    resizeArea.style.display = "none";
+    functionsDiv.style.borderTop = "none";
     for (let i = 0; i < functionsEle.length; i++) {
         functionsEle[i].hidden = true;
     }
@@ -247,11 +256,53 @@ closeOverview.addEventListener("click", function () {
 
 // open the note overview and set the with of the current preview to 60%
 openOverview.addEventListener("click", function () {
-    leftColumn.style.width = "40%";
-    rightColumn.style.width = "60%";
-    preview.style.borderLeft = "1px solid #eee";
+    leftColumn.style.display = "block";
+    resizeArea.style.display = "block";
+    functionsDiv.style.borderTop = "1px solid var(--main-color-3)"
     for (let i = 0; i < functionsEle.length; i++) {
         functionsEle[i].hidden = false;
     }
     openOverview.hidden = true;
 })
+
+
+
+// movable divider
+
+let isMdResizeArea = 0;
+resizeArea.addEventListener('mousedown', mdResizeArea);
+
+// if the mouse is down on the resize area div call mdResizeArea
+function mdResizeArea() {
+    isMdResizeArea = 1;
+
+    // make the left column unselectable during the resize phase
+    leftColumn.classList.add("unselectable");
+
+    // make no interaction in the iframe for the preview possible during the resize phase
+    preview.style.pointerEvents = "none";
+
+    document.body.addEventListener('mousemove', mVResizeArea);
+    document.body.addEventListener('mouseup', endMmResizeArea);
+}
+
+// if the mouse is moved during the time that the mouse is down on the resize area call mVResizeArea
+function mVResizeArea(event) {
+    if (isMdResizeArea === 1) {
+        // change the width of the functionsDiv and the leftColumn to the position of the mouse
+        functionsDiv.style.width = event.clientX + "px";
+        leftColumn.style.flexBasis = event.clientX + "px";
+    } else {
+        endMmResizeArea();
+    }
+}
+
+// if the mouse is up again rest the mouse down state, remove the added event listeners,
+// remove the unselectable state of the left column, make the iframe usable again
+function endMmResizeArea() {
+    isMdResizeArea = 0;
+    document.body.removeEventListener('mouseup', endMmResizeArea);
+    resizeArea.removeEventListener('mousemove', mVResizeArea);
+    leftColumn.classList.remove("unselectable");
+    preview.style.pointerEvents = "unset";
+}
