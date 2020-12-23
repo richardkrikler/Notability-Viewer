@@ -62,6 +62,7 @@ function showFolder(folderPath) {
     }
     folderUp.style.display = "block";
     searchInput.value = "";
+    setFunctionsDivWidth();
     sortListItems();
 }
 
@@ -248,6 +249,7 @@ closeOverview.addEventListener("click", function () {
     leftColumn.style.display = "none";
     resizeArea.style.display = "none";
     functionsDiv.style.borderTop = "none";
+    functionsDiv.style.backgroundColor = "unset";
     for (let i = 0; i < functionsEle.length; i++) {
         functionsEle[i].hidden = true;
     }
@@ -258,7 +260,8 @@ closeOverview.addEventListener("click", function () {
 openOverview.addEventListener("click", function () {
     leftColumn.style.display = "block";
     resizeArea.style.display = "block";
-    functionsDiv.style.borderTop = "1px solid var(--main-color-3)"
+    functionsDiv.style.borderTop = "1px solid var(--main-color-3)";
+    functionsDiv.style.backgroundColor = "var(--main-color-1)";
     for (let i = 0; i < functionsEle.length; i++) {
         functionsEle[i].hidden = false;
     }
@@ -305,4 +308,29 @@ function endMmResizeArea() {
     resizeArea.removeEventListener('mousemove', mVResizeArea);
     leftColumn.classList.remove("unselectable");
     preview.style.pointerEvents = "unset";
+    saveStorage("resizePos", leftColumn.style.flexBasis);
+}
+
+
+
+// local storage
+
+window.addEventListener("load", loadStorage);
+
+function loadStorage() {
+    let resizePos = getStorage("resizePos");
+    if (resizePos != null) {
+        leftColumn.style.flexBasis = resizePos;
+        setFunctionsDivWidth();
+    }
+}
+
+// get the value of the name in the local storage
+function getStorage(name) {
+    return localStorage.getItem(name);
+}
+
+// save to local storage
+function saveStorage(name, value) {
+    localStorage.setItem(name, value);
 }
