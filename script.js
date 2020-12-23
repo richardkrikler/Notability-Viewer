@@ -41,14 +41,33 @@ for (let i = 0; i < listItems.length; i++) {
         })
     } else if (listItems[i].className.includes("file")) {
         listItems[i].addEventListener("click", function () {
-            preview.src = this.id;
-            currentFilePath = this.id;
-            currentTitle = this.textContent;
-            document.title = this.textContent + " - Notability";
+            setPreview(this);
         })
     }
 }
 sortListItems();
+
+function setPreview(listItem) {
+    preview.src = listItem.id;
+    currentFilePath = listItem.id;
+    currentTitle = listItem.textContent;
+    document.title = listItem.textContent + " - Notability";
+
+    let windowHref = window.location.href.split("#");
+    let noteFolder = listItem.id.split("\\")[listItem.id.split("\\").length-2];
+    let noteFolderPossible = false;
+    for (let i = 0; i < listItems.length; i++) {
+        let listItemClass = listItems[i].classList;
+        if (listItemClass != null && listItemClass.item(0) == "folder" && listItems[i].textContent.trim() == noteFolder) {
+            noteFolderPossible = true;
+        }
+    }
+    if (!noteFolderPossible) {
+        noteFolder = "";
+    }
+
+    window.location.href = windowHref[0] + "#" + noteFolder + "/" + listItem.textContent;
+}
 
 
 // show the elements of a folder
@@ -333,4 +352,41 @@ function getStorage(name) {
 // save to local storage
 function saveStorage(name, value) {
     localStorage.setItem(name, value);
+}
+
+
+
+// current note in URL
+
+window.addEventListener("load", function () {
+    let note = window.location.href.split("#")[1];
+    if (note != null) {
+        note = replaceSpecialCharacter(note);
+        note = note.replace("/", "\\");
+        for (let i = 0; i < listItems.length; i++) {
+            let listItemId = listItems[i].id;
+            listItemId = listItemId.replaceAll("Ü", "Ü");
+            if (listItemId.includes(note)) {
+                setPreview(listItems[i]);
+                showFolder(listItems[i].id.substring(0,listItems[i].id.lastIndexOf("\\")));
+            }
+        }
+    }
+})
+
+function replaceSpecialCharacter(input) {
+    input = input.replaceAll("%20", " ");
+    input = input.replaceAll("%C3%84", "Ä");
+    input = input.replaceAll("A%CC%88", "Ä");
+    input = input.replaceAll("%C3%96", "Ö");
+    input = input.replaceAll("O%CC%88", "Ö");
+    input = input.replaceAll("%C3%9C", "Ü");
+    input = input.replaceAll("U%CC%88", "Ü");
+    input = input.replaceAll("%C3%A4", "ä");
+    input = input.replaceAll("a%CC%88", "ä");
+    input = input.replaceAll("%C3%B6", "ö");
+    input = input.replaceAll("o%CC%88", "ö");
+    input = input.replaceAll("%C3%BC", "ü");
+    input = input.replaceAll("u%CC%88", "ü");
+    return input;
 }
