@@ -12,6 +12,7 @@ let functionsDiv = document.getElementById("functions");
 let functionsEle = functionsDiv.childNodes;
 
 let newTab = document.getElementById("newTab");
+let newTabFile = document.getElementById("newTabFile");
 let searchInput = document.getElementById("searchInput");
 
 let copyTitle = document.getElementById("copyTitle");
@@ -109,6 +110,12 @@ folderUp.addEventListener("click", function () {
 
 // open the currently open note in a new browser tab
 newTab.addEventListener("click", function () {
+    window.open(window.location.href, '_blank');
+})
+
+
+// open the currently open note in a new browser tab (just the file)
+newTabFile.addEventListener("click", function () {
     window.open(preview.src, '_blank');
 })
 
@@ -366,6 +373,7 @@ window.addEventListener("load", function () {
         for (let i = 0; i < listItems.length; i++) {
             let listItemId = listItems[i].id;
             listItemId = listItemId.replaceAll("Ü", "Ü");
+            listItemId = listItemId.replaceAll("ü", "ü");
             if (listItemId.includes(note)) {
                 setPreview(listItems[i]);
                 showFolder(listItems[i].id.substring(0,listItems[i].id.lastIndexOf("\\")));

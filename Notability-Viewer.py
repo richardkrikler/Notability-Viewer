@@ -44,6 +44,7 @@ out += """</ul></div>
 <button id="closeOverview" title="Close overview">◀</button>
 <button id="openOverview" hidden title="Open overview">▶</button>
 <button id="newTab" title="Open in new Tab">New Tab</button>
+<button id="newTabFile" title="Open File in new Tab">New Tab File</button>
 <input type="search" id="searchInput" placeholder="Search" title="Search">
 <button id="copyTitle" title="Copy Title">Title</button>
 <button id="copyFilePath" title="Copy File Path">File Path</button>
