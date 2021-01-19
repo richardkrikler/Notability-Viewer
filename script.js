@@ -41,8 +41,13 @@ for (let i = 0; i < listItems.length; i++) {
             showFolder(this.id);
         })
     } else if (listItems[i].className.includes("file")) {
-        listItems[i].addEventListener("click", function () {
-            setPreview(this);
+        listItems[i].addEventListener("click", function (e) {
+            if (e.ctrlKey) {
+                // ctrl + click -> open file in new tab
+                window.open(this.id, '_blank');
+            } else {
+                setPreview(this);
+            }
         })
     }
 }
