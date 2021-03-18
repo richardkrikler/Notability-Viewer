@@ -2,12 +2,22 @@ let leftColumn = document.getElementById("leftColumn");
 let rightColumn = document.getElementById("rightColumn");
 let resizeArea = document.getElementById("resizeArea");
 
-let listItems = document.getElementsByTagName("li");
+
+// menu buttons
+let viewList = document.getElementById("viewList");
+let viewRecent = document.getElementById("viewRecent");
+let viewFavourite = document.getElementById("viewFavourite");
+
+
+let recentUL = document.getElementById("recentUL");
+let favouriteUL = document.getElementById("favouriteUL");
+let listUL = document.getElementById("listUL");
+
+let listItems = listUL.children;
 let preview = document.getElementById("preview");
 let folderUp = document.getElementById("folderUp");
 
-
-// menu buttons
+// function buttons
 let functionsDiv = document.getElementById("functions");
 let functionsEle = functionsDiv.childNodes;
 
@@ -32,15 +42,35 @@ window.addEventListener("load", setFunctionsDivWidth);
 window.addEventListener("resize", setFunctionsDivWidth);
 
 
+// menu view buttons
+viewList.addEventListener("click", function () {
+    listUL.classList.add("visible");
+    recentUL.classList.remove("visible");
+    favouriteUL.classList.remove("visible");
+});
+
+viewRecent.addEventListener("click", function () {
+    listUL.classList.remove("visible");
+    recentUL.classList.add("visible");
+    favouriteUL.classList.remove("visible");
+});
+
+viewFavourite.addEventListener("click", function () {
+    listUL.classList.remove("visible");
+    recentUL.classList.remove("visible");
+    favouriteUL.classList.add("visible");
+});
+
+
 // add an event listener to every file and folder
 // folder: show the files inside of that folder
 // files: previe the file with an iframe 
 for (let i = 0; i < listItems.length; i++) {
-    if (listItems[i].className.includes("folder")) {
+    if (listItems[i].classList.contains("folder")) {
         listItems[i].addEventListener("click", function () {
             showFolder(this.id);
         })
-    } else if (listItems[i].className.includes("file")) {
+    } else if (listItems[i].classList.contains("file")) {
         listItems[i].addEventListener("click", function (e) {
             if (e.ctrlKey) {
                 // ctrl + click -> open file in new tab
@@ -60,7 +90,7 @@ function setPreview(listItem) {
     document.title = listItem.textContent + " - Notability";
 
     let windowHref = window.location.href.split("#");
-    let noteFolder = listItem.id.split("\\")[listItem.id.split("\\").length-2];
+    let noteFolder = listItem.id.split("\\")[listItem.id.split("\\").length - 2];
     let noteFolderPossible = false;
     for (let i = 0; i < listItems.length; i++) {
         let listItemClass = listItems[i].classList;
@@ -95,7 +125,7 @@ function showFolder(folderPath) {
 // show the first layer of files and folders
 function showFirstLayer() {
     for (let j = 0; j < listItems.length; j++) {
-        if (listItems[j].className.includes("firstLayer")) {
+        if (listItems[j].classList.contains("firstLayer")) {
             listItems[j].style.display = "block";
         } else {
             listItems[j].style.display = "none";
@@ -128,6 +158,7 @@ newTabFile.addEventListener("click", function () {
 // search in the currently visible elements
 searchInput.addEventListener("keyup", function () {
     let filter = searchInput.value.toUpperCase();
+    console.log(filter);
     if (filter == "") {
         showFirstLayer();
         return;
@@ -164,9 +195,9 @@ function sortListItems() {
     let filesLi = [];
     for (let i = 1; i < listItems.length; i++) {
         if (listItems[i].style.display != "none") {
-            if (listItems[i].className.includes("file")) {
+            if (listItems[i].classList.contains("file")) {
                 filesLi.push(listItems[i]);
-            } else if (listItems[i].className.includes("folder")) {
+            } else if (listItems[i].classList.contains("folder")) {
                 foldersLi.push(listItems[i]);
             }
             visibleList.push(listItems[i]);
@@ -291,8 +322,8 @@ closeOverview.addEventListener("click", function () {
 openOverview.addEventListener("click", function () {
     leftColumn.style.display = "block";
     resizeArea.style.display = "block";
-    functionsDiv.style.borderTop = "1px solid var(--main-color-3)";
-    functionsDiv.style.backgroundColor = "var(--main-color-1)";
+    functionsDiv.style.borderTop = "2px solid var(--color-5)";
+    functionsDiv.style.backgroundColor = "var(--color-1)";
     for (let i = 0; i < functionsEle.length; i++) {
         functionsEle[i].hidden = false;
     }
@@ -381,7 +412,7 @@ window.addEventListener("load", function () {
             listItemId = listItemId.replaceAll("ü", "ü");
             if (listItemId.includes(note)) {
                 setPreview(listItems[i]);
-                showFolder(listItems[i].id.substring(0,listItems[i].id.lastIndexOf("\\")));
+                showFolder(listItems[i].id.substring(0, listItems[i].id.lastIndexOf("\\")));
             }
         }
     }

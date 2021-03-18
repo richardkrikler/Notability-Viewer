@@ -4,24 +4,48 @@ body {
 }
 
 :root {
-    --main-color-1: #222;
-    --main-color-2: #444;
-    --main-color-3: #eee;
-    --main-color-4: #bbb;
+    --color-1: #222;
+    --color-2: #444;
+    --color-3: #eee;
+    --color-4: #bbb;
+    --color-5: #888;
+    --color-6: #6e6e6e;
 }
 
 body {
-    background-color: var(--main-color-1);
+    background-color: var(--color-1);
     font-family: Arial, Helvetica, sans-serif;
 }
 
 * {
-    color: var(--main-color-4);
+    color: var(--color-4);
     padding: 0;
     margin: 0;
     box-sizing: border-box;
 }
 
+
+/* custom scrollbar */
+/* width */
+::-webkit-scrollbar {
+    width: 0.5rem;
+    height: 0.5rem;
+}
+
+/* track */
+::-webkit-scrollbar-track {
+    background: var(--color-2);
+}
+
+/* handle */
+::-webkit-scrollbar-thumb {
+    background: var(--color-6);
+}
+
+/* handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-6);
+}
 
 
 /* make element not selectable */
@@ -37,6 +61,13 @@ body {
 }
 
 
+button,
+input[type=search] {
+    padding: 5px;
+    background-color: var(--color-2);
+    border: 1px solid var(--color-3);
+}
+
 
 .row,
 .column#rightColumn {
@@ -49,7 +80,7 @@ body {
     min-width: 10%;
     max-width: 90%;
     margin-bottom: 40px;
-    overflow: auto;
+    overflow-y: scroll;
 
     flex-grow: 1;
     flex-shrink: 0;
@@ -65,32 +96,42 @@ body {
 .column#resizeArea {
     width: 0.25rem;
     margin: 0 0 0 auto;
-    background: var(--main-color-3);
+    background: var(--color-6);
     flex-grow: 0;
     flex-shrink: 0;
     cursor: col-resize;
 }
 
 
-
 ul {
-    width: 100%;
-    padding: 5px;
-    list-style-type: none;
+    display: none;
 }
 
+ul.visible {
+    display: block;
+    width: 100%;
+    padding: 5px;
+}
+
+
 li {
+    /* display: none; */
     padding: 8px 5px;
-    border-top: 1px solid var(--main-color-3);
+    border-top: 2px solid var(--color-6);
     cursor: pointer;
+}
+
+li.visible {
+    display: list-item;
 }
 
 li:hover {
     text-decoration: underline;
+    text-decoration-color: var(--color-6);
 }
 
 li.folder {
-    background-color: var(--main-color-2);
+    background-color: var(--color-2);
 }
 
 
@@ -103,12 +144,24 @@ iframe#preview {
 
 
 
+div#menu {
+    padding-top: 5px;
+    text-align: center;
+}
+
+div#menu * {
+    border: 0;
+    outline: none;
+}
+
+
+
 div#functions {
     min-width: 10%;
     max-width: 90%;
     padding: 6px;
-    background-color: var(--main-color-1);
-    border-top: 1px solid var(--main-color-3);
+    background-color: var(--color-1);
+    border-top: 2px solid var(--color-6);
     position: absolute;
     bottom: 0;
     white-space: nowrap;
@@ -116,9 +169,8 @@ div#functions {
 }
 
 div#functions * {
-    padding: 5px;
-    background-color: var(--main-color-2);
-    border: 1px solid var(--main-color-3);
+    border: 0;
+    outline: none;
 }
 
 div#functions #searchInput {
@@ -137,4 +189,12 @@ div#functions #copyTitle,
 div#functions #copyFilePath,
 div#functions #copyFolderPath {
     margin-left: 5px;
+}
+
+
+
+ul#recentUL.visible :first-child,
+ul#favouriteUL.visible :first-child {
+    display: list-item;
+    background-color: var(--color-2);
 }
