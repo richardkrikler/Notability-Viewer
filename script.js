@@ -217,37 +217,22 @@ function sortListItems() {
     foldersLi.reverse();
 
     filesLi.sort(function (a, b) {
+        // get the date from the filename
         let aDate = a.innerText.substring(a.innerText.length - 14, a.innerText.length - 4);
         let bDate = b.innerText.substring(b.innerText.length - 14, b.innerText.length - 4);
-        if (aDate.charAt(2) == '.' && bDate.charAt(2) == '.') {
-            aDate = aDate.split(".");
-            bDate = bDate.split(".");
 
-            // if the year of aDate is bigger than the year of bDate
-            if (aDate[2] > bDate[2]) {
-                return 1;
-            }
+        aDate = aDate.split(".");
+        aDate = new Date(aDate[2], aDate[1], aDate[0]);
+        bDate = bDate.split(".");
+        bDate = new Date(bDate[2], bDate[1], bDate[0]);
 
-            // if the year and the month of aDate is bigger than the year and the month of bDate
-            if (aDate[2] >= bDate[2]) {
-                if (aDate[1] > bDate[1]) {
-                    return 1;
-                }
-            }
-
-            // if the year, month and the day is of aDate is bigger than the year, month and day of bDate
-            if (aDate[2] >= bDate[2]) {
-                if (aDate[1] >= bDate[1]) {
-                    if (aDate[0] > bDate[0]) {
-                        return 1;
-                    }
-                }
-            }
-
-            return -1;
+        // check if a and b are actually valid dates
+        if (!isNaN(aDate.valueOf()) && !isNaN(bDate.valueOf())) {
+            // return 1 if the date is nearer to the current date; else return -1 
+            return ((aDate > bDate) ? 1 : -1);
+        } else {
+            return 0;
         }
-
-        return 0;
     })
 
 
