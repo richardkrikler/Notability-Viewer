@@ -98,7 +98,7 @@ function setPreview(listItem) {
     let noteFolderPossible = false;
     for (let i = 0; i < listItems.length; i++) {
         let listItemClass = listItems[i].classList;
-        if (listItemClass != null && listItemClass.item(0) == "folder" && listItems[i].textContent.trim() == noteFolder) {
+        if (listItemClass != null && listItemClass.item(0) == "folder" && listItems[i].textContent.trim().slice(3) == noteFolder) {
             noteFolderPossible = true;
         }
     }
