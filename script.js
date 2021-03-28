@@ -64,24 +64,28 @@ viewFavourite.addEventListener("click", function () {
 
 // add an event listener to every file and folder
 // folder: show the files inside of that folder
-// files: previe the file with an iframe 
+// files: preview the file with an iframe 
 for (let i = 0; i < listItems.length; i++) {
     if (listItems[i].classList.contains("folder")) {
         listItems[i].addEventListener("click", function () {
             showFolder(this.id);
         })
     } else if (listItems[i].classList.contains("file")) {
-        listItems[i].addEventListener("click", function (e) {
-            if (e.ctrlKey) {
-                // ctrl + click -> open file in new tab
-                window.open(this.id, '_blank');
-            } else {
-                setPreview(this);
-            }
-        })
+        listItems[i].addEventListener("click", fileClickEvent);
     }
 }
 sortListItems();
+
+// onClick event for the file list items
+function fileClickEvent(e) {
+    if (e.ctrlKey) {
+        // ctrl + click -> open file in new tab
+        window.open(this.id, '_blank');
+    } else {
+        setPreview(this);
+    }
+}
+
 
 function setPreview(listItem) {
     preview.src = listItem.id;
@@ -103,6 +107,42 @@ function setPreview(listItem) {
     }
 
     window.location.href = windowHref[0] + "#" + noteFolder + "/" + listItem.textContent;
+
+    // ------------------
+    // add clicked notes to the recent notes list
+
+    // clone the clicked note
+    let listItemCopy = listItem.cloneNode(true);
+    listItemCopy.addEventListener("click", fileClickEvent);
+    listItemCopy.style.display = "block";
+
+    // check if item is already in recent list -> remove
+    for (let i = 0; i < recentUL.children.length; i++) {
+        if (listItem.id == recentUL.children[i].id) {
+            recentUL.removeChild(recentUL.children[i]);
+        }
+    }
+
+    // if there are more than 15 notes in the recent notes list -> remove last item
+    // (+1) for the "Recent Notes" header
+    if (recentUL.children.length >= 15 + 1) {
+        recentUL.removeChild(recentUL.lastChild);
+    }
+
+    // insert the clicked note after the "Recent Notes" item
+    recentUL.insertBefore(listItemCopy, recentUL.firstElementChild.nextSibling);
+    
+
+    // get alle elements of the recent notes list -> store in array
+    let recentULElementsString = "";
+    for (let i = 1; i < recentUL.children.length; i++) {
+        recentULElementsString += recentUL.children[i].outerHTML;
+        if (i < recentUL.children.length - 1) {
+            recentULElementsString += "";
+        }
+    }
+    // save recent notes array into local storage
+    saveStorage("recentNotes", recentULElementsString);
 }
 
 
@@ -159,10 +199,10 @@ newTabFile.addEventListener("click", function () {
 searchInput.addEventListener("keyup", function () {
     let filter = searchInput.value.toUpperCase();
     console.log(filter);
-    if (filter == "") {
-        showFirstLayer();
-        return;
-    }
+    // if (filter == "") {
+    //     showFirstLayer();
+    //     return;
+    // }
 
     let visibleList = [];
     for (let i = 0; i < listItems.length; i++) {
@@ -369,6 +409,16 @@ function loadStorage() {
     if (resizePos != null) {
         leftColumn.style.flexBasis = resizePos;
         setFunctionsDivWidth();
+    }
+
+    let recentNotes = getStorage("recentNotes");
+    if (recentNotes != null) {
+        recentNotes = recentNotes.split("");
+        for (let i = 0; i < recentNotes.length; i++) {
+            let frag = document.createRange().createContextualFragment(recentNotes[i]).firstChild;
+            frag.addEventListener("click", fileClickEvent);
+            recentUL.appendChild(frag);
+        }
     }
 }
 
