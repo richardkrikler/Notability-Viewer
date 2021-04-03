@@ -1,7 +1,7 @@
 # Notability-Viewer
 Notability Note Viewer for the Backup PDFs inside of a file system (e.g. with OneDrive integration in Windows).
 
-![Overview of the Notability-Viewer](https://github.com/richardkrikler/Notability-Viewer/blob/master/images/Notability-Viewer.png?raw=true)
+![Overview of the Notability-Viewer](https://github.com/RichardKrikler/Notability-Viewer/blob/master/images/Notability-Viewer.png?raw=true)
 
 
 ## Features
