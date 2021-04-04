@@ -83,6 +83,43 @@ function fileClickEvent(e) {
         window.open(this.id, '_blank');
     } else {
         setPreview(this);
+
+
+        // ------------------
+        // add clicked notes to the recent notes list
+
+        // clone the clicked note
+        let listItemCopy = this.cloneNode(true);
+        listItemCopy.addEventListener("click", fileClickEvent);
+        listItemCopy.style.display = "block";
+
+        // check if item is already in recent list -> remove
+        for (let i = 0; i < recentUL.children.length; i++) {
+            if (this.id == recentUL.children[i].id) {
+                recentUL.removeChild(recentUL.children[i]);
+            }
+        }
+
+        // if there are more than 15 notes in the recent notes list -> remove last item
+        // (+1) for the "Recent Notes" header
+        if (recentUL.children.length >= 15 + 1) {
+            recentUL.removeChild(recentUL.lastChild);
+        }
+
+        // insert the clicked note after the "Recent Notes" item
+        recentUL.insertBefore(listItemCopy, recentUL.firstElementChild.nextSibling);
+
+
+        // get alle elements of the recent notes list -> store in array
+        let recentULElementsString = "";
+        for (let i = 1; i < recentUL.children.length; i++) {
+            recentULElementsString += recentUL.children[i].outerHTML;
+            if (i < recentUL.children.length - 1) {
+                recentULElementsString += "";
+            }
+        }
+        // save recent notes array into local storage
+        saveStorage("recentNotes", recentULElementsString);
     }
 }
 
@@ -107,42 +144,6 @@ function setPreview(listItem) {
     }
 
     window.location.href = windowHref[0] + "#" + noteFolder + "/" + listItem.textContent;
-
-    // ------------------
-    // add clicked notes to the recent notes list
-
-    // clone the clicked note
-    let listItemCopy = listItem.cloneNode(true);
-    listItemCopy.addEventListener("click", fileClickEvent);
-    listItemCopy.style.display = "block";
-
-    // check if item is already in recent list -> remove
-    for (let i = 0; i < recentUL.children.length; i++) {
-        if (listItem.id == recentUL.children[i].id) {
-            recentUL.removeChild(recentUL.children[i]);
-        }
-    }
-
-    // if there are more than 15 notes in the recent notes list -> remove last item
-    // (+1) for the "Recent Notes" header
-    if (recentUL.children.length >= 15 + 1) {
-        recentUL.removeChild(recentUL.lastChild);
-    }
-
-    // insert the clicked note after the "Recent Notes" item
-    recentUL.insertBefore(listItemCopy, recentUL.firstElementChild.nextSibling);
-    
-
-    // get alle elements of the recent notes list -> store in array
-    let recentULElementsString = "";
-    for (let i = 1; i < recentUL.children.length; i++) {
-        recentULElementsString += recentUL.children[i].outerHTML;
-        if (i < recentUL.children.length - 1) {
-            recentULElementsString += "";
-        }
-    }
-    // save recent notes array into local storage
-    saveStorage("recentNotes", recentULElementsString);
 }
 
 
@@ -435,16 +436,22 @@ function saveStorage(name, value) {
 
 
 // current note in URL
-
 window.addEventListener("load", function () {
     let note = window.location.href.split("#")[1];
     if (note != null) {
-        note = replaceSpecialCharacter(note);
+        note = replaceSpecialUrlCharacter(note);
         note = note.replace("/", "\\");
         for (let i = 0; i < listItems.length; i++) {
             let listItemId = listItems[i].id;
+
+            // replacing special umlaute (Combining Diaeresis; "U+0308")
             listItemId = listItemId.replaceAll("Ü", "Ü");
             listItemId = listItemId.replaceAll("ü", "ü");
+            listItemId = listItemId.replaceAll("Ä", "Ä");
+            listItemId = listItemId.replaceAll("ä", "ä");
+            listItemId = listItemId.replaceAll("Ö", "Ö");
+            listItemId = listItemId.replaceAll("ö", "ö");
+
             if (listItemId.includes(note)) {
                 setPreview(listItems[i]);
                 showFolder(listItems[i].id.substring(0, listItems[i].id.lastIndexOf("\\")));
@@ -453,7 +460,7 @@ window.addEventListener("load", function () {
     }
 })
 
-function replaceSpecialCharacter(input) {
+function replaceSpecialUrlCharacter(input) {
     input = input.replaceAll("%20", " ");
     input = input.replaceAll("%C3%84", "Ä");
     input = input.replaceAll("A%CC%88", "Ä");
