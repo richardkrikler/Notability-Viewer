@@ -125,7 +125,7 @@ function fileClickEvent(e) {
 
 
 function setPreview(listItem) {
-    preview.src = listItem.id;
+    preview.src = "file:///" + listItem.id;
     currentFilePath = listItem.id;
     currentTitle = listItem.textContent;
     document.title = listItem.textContent + " - Notability";
@@ -192,7 +192,7 @@ newTab.addEventListener("click", function () {
 
 // open the currently open note in a new browser tab (just the file)
 newTabFile.addEventListener("click", function () {
-    window.open(preview.src, '_blank');
+    window.open("file:///" + preview.src, '_blank');
 })
 
 
