@@ -7,6 +7,7 @@ Notability Note Viewer for the Backup PDFs inside of a file system (e.g. with On
 ## Features
  - [x] Resizable menu (position stored in local storage)
  - [x] Folder & File name in URL (Example: "*/Notability-Viewer/Notability.html#Sonstiges/Quick%20Notes%20-%2024.07.2020.pdf")
+ - [x] Automatic Dark/Light-Mode change (based on OS settings)
  - Notes List
    - [x] List all Notes (PDF) from the Backup-Folder
    - [x] Sort Folders alphabetically

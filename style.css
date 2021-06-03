@@ -10,6 +10,11 @@ body {
     --color-4: #d2d2d2;
     --color-5: #888888;
     --color-6: #6e6e6e;
+    --light-color-1: #ffffff;
+    --light-color-2: #f6f8fa;
+    --light-color-3: #eeeeee;
+    --light-color-4: #dcdfe4;
+    --light-color-5: #586069;
 }
 
 body {
@@ -197,4 +202,63 @@ ul#recentUL.visible :first-child,
 ul#favouriteUL.visible :first-child {
     display: list-item;
     background-color: var(--color-2);
+}
+
+
+/* Light Mode */
+@media (prefers-color-scheme: light) {
+    * {
+        color: var(--light-color-5);
+    }
+
+    body {
+        background: var(--light-color-1);
+    }
+
+    iframe#preview {
+        background-color: var(--light-color-3);
+    }
+
+    button,
+    input[type=search] {
+        background-color: var(--light-color-3);
+    }
+
+    li {
+        border-top: 2px solid var(--light-color-4);
+    }
+
+    li.folder {
+        background-color: var(--light-color-2);
+    }
+
+    /* track */
+    ::-webkit-scrollbar-track {
+        background: var(--light-color-3);
+    }
+
+    /* handle */
+    ::-webkit-scrollbar-thumb {
+        background: var(--light-color-4);
+    }
+
+    /* handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--light-color-4);
+    }
+
+    .column#resizeArea {
+        background: var(--light-color-4);
+    }
+
+    div#functions {
+        background-color: var(--light-color-1);
+        border-top: 2px solid var(--light-color-4);
+    }
+
+    ul#recentUL.visible :first-child,
+    ul#favouriteUL.visible :first-child {
+        display: list-item;
+        background-color: var(--light-color-2);
+    }
 }
